@@ -22,20 +22,23 @@ export default class AddPatient extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            modalVisible: false,
+            modalVisibleA: false,
             treat: '',
             pCase: ''
         };
     }
-    setModalVisible(visible) {
-        this.setState({modalVisible: visible});
+    setmodalVisibleA(visible) {
+        this.setState({modalVisibleA: visible});
     }
     _handleSubmit = () => {
-        this.setModalVisible(false)
+        this.setmodalVisibleA(false)
         let {treat, pCase} = this.state;
+        let date = new Date();
+        date.setHours(0,0,0,0)
         this.props.onSubmit(this.props.ind,{
             pCase,
-            treat
+            treat,
+            date
         })
     }
     render() {
@@ -44,7 +47,7 @@ export default class AddPatient extends Component {
                 <Modal
                     animationType={"slide"}
                     transparent={false}
-                    visible={this.state.modalVisible}
+                    visible={this.state.modalVisibleA}
                     onRequestClose={()=>{}}
                 >
                 <Container style={styles.container}>
@@ -84,7 +87,7 @@ export default class AddPatient extends Component {
                         <Text>Add</Text>
                         </Button>
                         <Button onPress={() => {
-                                this.setModalVisible(false)
+                                this.setmodalVisibleA(false)
                             }}
                             style={styles.label}
                         >
@@ -95,7 +98,7 @@ export default class AddPatient extends Component {
                 </Container>
                 </Modal>
                 <Button style={{minHeight: '100%'}} success onPress={() => {
-                        this.setModalVisible(true)
+                        this.setmodalVisibleA(true)
                     }}>
                     <Icon active name="add" />
                 </Button>

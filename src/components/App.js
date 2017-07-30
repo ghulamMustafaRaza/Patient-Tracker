@@ -7,13 +7,19 @@ import LeftBtn from './LeftBtn'
 import {addPatient,
         addPatientVisit,
         removePatient} from '../store/actions/patientActions'
+import SwiperBody from './SwiperBody'
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state={
-      patients: (props.patients || [])
+      patients: (props.patients || []),
+      search: ''
     }
+  }
+  findByName = (patient) => {
+    name = patient.name;
+    return name.search(this.state.search) >= 0 ? true : false 
   }
   componentDidMount(){
     console.log(this.props)
@@ -28,15 +34,23 @@ class App extends Component {
         <Header style={{width: '100%'}} searchBar rounded>
           <Item style={{width: '100%'}}>
             <Icon style={{color: '#44f'}} name="ios-search" />
-            <Input placeholderTextColor="#44f" style={{height: '100%', color: '#44f'}} placeholder="Search" />
+            <Input placeholderTextColor="#44f" 
+              value={this.state.search}
+              onChange={(e) => {
+                this.setState({
+                  search: e.nativeEvent.text
+                })
+              }}
+              style={{height: '100%', color: '#44f'}} placeholder="Search" />
             <Icon style={{color: '#44f'}} name="ios-people" />
-            <Button style={{height: '100%'}} transparent>
+            {/* <Button style={{height: '100%'}} transparent>
               <Text>Search</Text>
-            </Button>
+            </Button> */}
           </Item>
         </Header>
         <Content style={{backgroundColor: '#efefef'}}>
-            {this.state.patients.map((el, ind) => (
+          {/* <Text>{JSON.stringify(this.state.patients.filter(this.findByName))}</Text> */}
+            {this.state.patients.filter(this.findByName).map((el, ind) => (
               <SwipeRow
                 key={ind} 
                 leftOpenValue={75}
@@ -45,9 +59,7 @@ class App extends Component {
                   <LeftBtn onSubmit={this.props.addPatientVisit} ind={ind} />
                 }
                 body={
-                  <View >
-                    <Text>Name: {el.name} Phone: {el.phone}</Text>
-                  </View>
+                  <SwiperBody el={el}/>
                 }
                 right={
                   <Button danger onPress={this.props.removePatient.bind(null, ind)}>
@@ -62,7 +74,7 @@ class App extends Component {
             <Button full>
               <Text>Footer</Text>
             </Button>
-          <AddPatient addPatient={this.props.addPatient}  />
+          <AddPatient ind={this.state.patients.length} addPatient={this.props.addPatient}  />
           </FooterTab>
         </Footer>
       </Container>

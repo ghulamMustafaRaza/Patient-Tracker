@@ -10,9 +10,15 @@ export const patientReducer = (state = initState, action) => {
     switch (action.type) {
         case 'SET_PATIENTS':
           newState.patients = action.payload
+          var patients = (action.payload?[...action.payload] : [])
+          console.log('alert',patients)
+          for(i=0;i<patients.length;i++){
+            patients[i].ind = i
+          }
+          newState.patients = patients
           break;
         case 'ADD_PATIENT':
-          newState.patients.push(action.payload)
+          newState.patients = newState.patients.concat(action.payload)
           break;
         case 'ADD_PATIENT_VISIT':
           newState.patients[action.payload.ind].visits?
@@ -25,6 +31,12 @@ export const patientReducer = (state = initState, action) => {
             ...newState.patients.slice(0, action.payload),
             ...newState.patients.slice(action.payload + 1),
           ]
+          var patients = ([...action.payload] || [])
+          console.log('alert',patients)
+          for(i=0;i<patients.length;i++){
+            patients[i].ind = i
+          }
+          newState.patients = patients
           break;
         case 'REMOVE_ALL_PATIENTS':
           AsyncStorage.removeItem('patient')

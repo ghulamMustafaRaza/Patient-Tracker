@@ -19,7 +19,10 @@ export default class AddPatient extends Component {
         this.props.addPatient({
             name: this.state.name,
             phone: this.state.phone,
+            ind: this.props.ind
         })
+        this.setState({name:'', phone: ''})
+        this.setModalVisible(false)
     }
     render() {
         return (

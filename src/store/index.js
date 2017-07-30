@@ -19,6 +19,12 @@ const store =  createStore(patientReducer, {}, applyMiddleware(thunk, logger));
             })
         console.log('localItem,',value)
         }
+        else{
+            store.dispatch({
+                type: 'SET_PATIENTS',
+                payload: []
+            })
+        }
         store.dispatch({
             type: 'CNG_LOAD_STATE'
         })
