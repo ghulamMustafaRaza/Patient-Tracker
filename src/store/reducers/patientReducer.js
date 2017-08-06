@@ -1,63 +1,50 @@
 import {AsyncStorage} from 'react-native'
-
+import {PatientActions} from '../actions'
 const initState = {
  patients: [],
  isLoading: true
 }
+ ADD_PATIENT = "ADD_PATIENT"
+ ADD_PATIENT_FULFIL = "ADD_PATIENT_FULFIL"
+
+ ADD_PATIENT_VISIT = "ADD_PATIENT_VISIT"
+ ADD_PATIENT_VISIT_FULFIL = "ADD_PATIENT_VISIT_FULFIL"
+
+ REMOVE_PATIENT = "REMOVE_PATIENT"
+ REMOVE_PATIENT_FULFIL = "REMOVE_PATIENT_FULFIL"
+
+ SET_PATIENTS = "SET_PATIENTS"
+ CNG_LOAD_STATE = "CNG_LOAD_STATE"
 
 export const patientReducer = (state = initState, action) => {
   console.log(state, initState)
     var newState = {...state};
     switch (action.type) {
-        case 'SET_PATIENTS':
-          newState.patients = action.payload
-          var patients = (action.payload?[...action.payload] : [])
-          console.log('alert',patients)
-          for(i=0;i<patients.length;i++){
-            patients[i].ind = i
-          }
-          newState.patients = patients
+        case PatientActions.AFTER_TEST_HELLO: {
+          console.log("In PatientActions. After Test hello",action.payload)
+          return {...newState, data:action.payload}
+        }
+          
+        case PatientActions.LOAD_PATIENTS_FULFIL:
+          return {...newState,patients: action.payload}
           break;
-        case 'ADD_PATIENT':
-          newState.patients = newState.patients.concat(action.payload)
+        case PatientActions.ADD_PATIENT_FULFIL:
+          return {...newState,patients: newState.patients.concat(action.payload)}
           break;
-        case 'ADD_PATIENT_VISIT':
-          let patients = Object.assign([], newState.patients);
-          (newState.patients[action.payload.ind].visits?
-            patients[action.payload.ind].visits = patients[action.payload.ind].visits.concat(action.payload.visit)
-          :
-            patients[action.payload.ind].visits = [action.payload.visit])
-            newState.patients = patients;
+        case PatientActions.ADD_PATIENT_VISIT_FULFIL:
+            return {...newState}
           break;
-        case 'REMOVE_PATIENT':
-          newState.patients = [
+        case PatientActions.REMOVE_PATIENT_FULFIL:
+            return {...newState,patients: [
             ...newState.patients.slice(0, action.payload),
             ...newState.patients.slice(action.payload + 1),
-          ]
-          var patients = ([...newState.patients] || [])
-          console.log('alert',patients)
-          for(i=0;i<patients.length;i++){
-            patients[i].ind = i
-          }
-          newState.patients = patients
+          ]}
           break;
-        case 'REMOVE_ALL_PATIENTS':
-          AsyncStorage.removeItem('patient')
+        case PatientActions.REMOVE_ALL_PATIENTS:
           newState.patients = [];
           break;
-        case 'CNG_LOAD_STATE':
-          newState.isLoading = false
-          break;
-        case 'UPD_LOCALSTORAGE':
-          AsyncStorage.setItem('@patients', JSON.stringify(newState), () => {
-            AsyncStorage.mergeItem('patients', JSON.stringify(newState), () => {
-              AsyncStorage.getItem('patients', (err, result) => {
-                console.log(result);
-              });
-            });
-          })
-        break;
+        default:
+        return newState
     }
     console.log(action.type, newState)
-    return newState;
 }

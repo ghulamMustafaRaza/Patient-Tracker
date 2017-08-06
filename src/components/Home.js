@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import {SwipeRow ,Item, Input, Container, Header, View, Card, CardItem, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import {connect} from 'react-redux'
 import {StyleSheet, AppRegistry} from 'react-native'
+
 import AddPatient from './AddPatient'
 import LeftBtn from './LeftBtn'
-import {addPatient,
-        addPatientVisit,
-        removePatient} from '../store/actions/patientActions'
+import {PatientActions} from '../store/actions'
 import SwiperBody from './SwiperBody'
 import {StackNavigator} from 'react-navigation'
 import {Tabs} from './router'
@@ -39,7 +38,7 @@ class Home extends Component {
   render() {
     return (
       <Container style={styles.container}>
-         <Header style={{width: '100%', backgroundColor: "#fff"}} searchBar rounded>
+         <Header  style={{width: '100%', backgroundColor: "#fff"}} searchBar rounded>
           <Item style={{width: '100%'}}>
             <Icon style={{color: '#09f'}} name="ios-search" />
             <Input placeholderTextColor="#09f" 
@@ -74,15 +73,13 @@ const styles = StyleSheet.create({
   }
 })
 
-mapStateToProps = (...arg) => {
-  console.log(arg)
-  return({
-  patients:  arg[0].patients
-})}
+mapStateToProps = (state) => ({
+  patients:  state.patients
+})
 mapDispatchToProps = (dispatch) => ({
-  addPatient      : (data) => {dispatch(addPatient(data))},
-  addPatientVisit : (ind, data) => {dispatch(addPatientVisit(ind, data))},
-  removePatient   : (ind) => {dispatch(removePatient(ind))}
+  addPatient      : (data) => {dispatch(PatientActions.addPatient(data))},
+  addPatientVisit : (ind, data) => {dispatch(PatientActions.addPatientVisit(ind, data))},
+  removePatient   : (ind) => {dispatch(PatientActions.removePatient(ind))}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

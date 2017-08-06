@@ -4,9 +4,7 @@ import {connect} from 'react-redux'
 import {StyleSheet, AppRegistry} from 'react-native'
 import AddPatient from './AddPatient'
 import LeftBtn from './LeftBtn'
-import {addPatient,
-        addPatientVisit,
-        removePatient} from '../store/actions/patientActions'
+import {PatientActions} from '../store/actions'
 import SwiperBody from './SwiperBody'
 import {StackNavigator} from 'react-navigation'
 import {Tabs} from './router'

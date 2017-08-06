@@ -3,9 +3,7 @@ import {Form, Label, Item, Input, Container, Header, Title, Content, Footer, Foo
 import {Modal, StyleSheet, View } from 'react-native';
 import {connect} from 'react-redux'
 import LeftBtn from './LeftBtn'
-import {addPatient,
-        addPatientVisit,
-        removePatient} from '../store/actions/patientActions'
+import {PatientActions} from '../store/actions'
 
 class ViewDetaile extends React.Component{
     constructor(props){
@@ -22,7 +20,7 @@ class ViewDetaile extends React.Component{
     }
     _handleDelete =() => {
         console.log(this.props.navigation.state.params.ind)
-        this.props.removePatient(this.props.navigation.state.params.ind)
+        this.props.removePatient({id: this.props.patients[this.props.navigation.state.params.ind]._id})
         console.log(this.props)
         this.props.navigation.goBack()
     }
@@ -84,11 +82,14 @@ const styles = StyleSheet.create({
     },
     label: { backgroundColor: '#f55'}
 })
-mapDispatchToProps = (dispatch) => ({
-  addPatientVisit : (ind, data) => {dispatch(addPatientVisit(ind, data))},
-  removePatient   : (ind) => {dispatch(removePatient(ind))}
-})
+
 mapStateToProps = (state) => ({
   patients:  state.patients
 })
+mapDispatchToProps = (dispatch) => ({
+  addPatientVisit : (ind, data) => {dispatch(PatientActions.addPatientVisit(ind, data))},
+  removePatient   : (ind) => {dispatch(PatientActions.removePatient(ind))}
+})
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(ViewDetaile)

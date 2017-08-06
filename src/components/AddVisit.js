@@ -3,9 +3,7 @@ import {Form, Label, Item, Input, Container, Header, Title, Content, Footer, Foo
 import {Modal, StyleSheet, View } from 'react-native';
 import {connect} from 'react-redux'
 import LeftBtn from './LeftBtn'
-import {addPatient,
-        addPatientVisit,
-        removePatient} from '../store/actions/patientActions'
+import {PatientActions} from '../store/actions'
 
 class ViewDetaile extends React.Component{
     constructor(props){
@@ -19,10 +17,13 @@ class ViewDetaile extends React.Component{
         let {treat, pCase} = this.state;
         let date = new Date();
         date.setHours(0,0,0,0)
-        this.props.addPatientVisit(this.props.navigation.state.params.ind,{
-            pCase,
-            treat,
-            date
+        this.props.addPatientVisit({
+            id: this.props.patients[this.props.navigation.state.params.ind]._id,
+            visit:  JSON.stringify({
+                pCase,
+                treat,
+                date
+            })
         })
         this.props.navigation.goBack()
     }
@@ -77,7 +78,12 @@ const styles = StyleSheet.create({
     },
     label: { backgroundColor: '#f55'}
 })
+
 mapDispatchToProps = (dispatch) => ({
-  addPatientVisit : (ind, data) => {dispatch(addPatientVisit(ind, data))}
+  addPatientVisit : (ind, data) => {dispatch(PatientActions.addPatientVisit(ind, data))},
 })
-export default connect(()=>({}), mapDispatchToProps)(ViewDetaile)
+mapStateToProps = (store) => ({
+  patients : store.patients
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewDetaile)

@@ -3,9 +3,7 @@ import DatePicker from 'react-native-datepicker'
 import {Form, Label, Item, Input, Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import {BackHandler, Modal, StyleSheet, TouchableHighlight, View } from 'react-native';
 import {connect} from 'react-redux'
-import {addPatient,
-        addPatientVisit,
-        removePatient} from '../store/actions/patientActions'
+import {PatientActions} from '../store/actions'
 
 class AddPatient extends Component {
     constructor(props) {
@@ -74,11 +72,13 @@ const styles = StyleSheet.create({
     },
     label: { backgroundColor: '#f55'}
 })
+
 mapStateToProps = (state) => ({
-  ind:  state.patients.lenght
+  patients:  state.patients
 })
+
 mapDispatchToProps = (dispatch) => ({
-  addPatient      : (data) => {dispatch(addPatient(data))}
+  addPatient      : (data) => {dispatch(PatientActions.addPatient(data))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPatient)
